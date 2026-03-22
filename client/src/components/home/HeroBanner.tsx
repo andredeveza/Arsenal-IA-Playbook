@@ -4,14 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useUserStore } from "@/store/userStore";
 
 interface HeroBannerProps {
   content: ContentItem;
 }
 
 export default function HeroBanner({ content }: HeroBannerProps) {
-  const [isAdded, setIsAdded] = useState(false);
   const [, setLocation] = useLocation();
+  const { isFavorite, toggleFavorite } = useUserStore();
+  const isAdded = isFavorite(content.id);
+
+  const handleToggleFavorite = () => {
+    toggleFavorite(content.id);
+  };
 
   return (
     <div className="relative w-full h-[85vh] md:h-[95vh] flex items-center mb-10 md:mb-16">
@@ -33,8 +39,8 @@ export default function HeroBanner({ content }: HeroBannerProps) {
           <Badge className="bg-red-600 hover:bg-red-700 text-white font-black tracking-widest rounded-sm text-[10px] md:text-xs px-2 py-1 shadow-lg shadow-red-900/20 uppercase">
             DESTAQUE DA SEMANA
           </Badge>
-          <Badge variant="outline" className="border-white/10 text-gray-300 bg-black/60 backdrop-blur-md font-medium tracking-wide uppercase text-[10px] md:text-xs py-1">
-            {content.type.replace('_', ' ')}
+          <Badge variant="outline" className="border-red-500/50 text-red-500 bg-red-500/10 backdrop-blur-md font-black tracking-wide uppercase text-[10px] md:text-xs py-1 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+            NÍVEL {content.level}
           </Badge>
           {content.isPremium && (
             <div className="flex items-center gap-1 text-amber-500 text-xs font-bold tracking-wider">
@@ -49,7 +55,7 @@ export default function HeroBanner({ content }: HeroBannerProps) {
         
         <div className="flex items-center gap-4 md:gap-6 text-sm md:text-base font-medium text-gray-300 mb-8 drop-shadow-md opacity-0 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards" style={{ animationDelay: '500ms' }}>
           <span className="text-green-500 font-bold tracking-wide">99% Relevância</span>
-          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span> Nível {content.level}</span>
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span> {content.type.replace('_', ' ')}</span>
           <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span> {content.tools[0]}</span>
         </div>
 
@@ -70,7 +76,7 @@ export default function HeroBanner({ content }: HeroBannerProps) {
             size="lg" 
             variant="outline" 
             className="bg-zinc-900/60 hover:bg-zinc-800 border border-white/10 text-white font-bold text-lg px-8 py-7 md:py-8 rounded-md backdrop-blur-md transition-all hover:border-white/30"
-            onClick={() => setIsAdded(!isAdded)}
+            onClick={handleToggleFavorite}
           >
             {isAdded ? (
               <><Check className="w-6 h-6 mr-3 text-green-500" /> Adicionado</>

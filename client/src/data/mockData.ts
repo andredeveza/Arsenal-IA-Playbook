@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export type ContentType = "master_prompt" | "architecture" | "conversion_system" | "narrative_engine";
-export type ContentLevel = "Fundacional" | "Avançado" | "Especialista";
+export type ContentLevel = "Iniciante" | "Intermediário" | "Avançado" | "Mestre";
 export type ContentTool = "ChatGPT Plus" | "Claude 3.5 Sonnet" | "Midjourney v6" | "Gemini Advanced" | "Agnóstico";
 export type VisualType = "prompt_anatomy" | "framework_map" | "funnel_illustration" | "script_storyboard";
 
@@ -42,68 +42,187 @@ export const assets = {
   thumbScripts
 };
 
-const getVisualData = (type: ContentType) => {
+const getVisualData = (type: ContentType, level: ContentLevel) => {
   if (type === 'master_prompt') {
+    const blocks = level === 'Iniciante' ? [
+      { name: "TAREFA", role: "O que a IA deve fazer", color: "border-blue-500", text: "text-blue-400" },
+      { name: "CONTEXTO", role: "Informação básica", color: "border-green-500", text: "text-green-400" }
+    ] : level === 'Intermediário' ? [
+      { name: "PAPEL", role: "Persona a ser adotada", color: "border-purple-500", text: "text-purple-400" },
+      { name: "TAREFA", role: "Ação específica", color: "border-blue-500", text: "text-blue-400" },
+      { name: "REGRAS", role: "Restrições de formato", color: "border-orange-500", text: "text-orange-400" }
+    ] : level === 'Avançado' ? [
+      { name: "SYSTEM", role: "Instrução cognitiva base", color: "border-red-500", text: "text-red-400" },
+      { name: "CONTEXTO PROFUNDO", role: "Cenário detalhado", color: "border-blue-500", text: "text-blue-400" },
+      { name: "FEW-SHOT", role: "Exemplos de saída", color: "border-green-500", text: "text-green-400" },
+      { name: "RESTRIÇÕES", role: "Limites estritos", color: "border-orange-500", text: "text-orange-400" }
+    ] : [
+      { name: "SYSTEM INSTRUCTION", role: "Define a base cognitiva e regras absolutas.", color: "border-purple-500", text: "text-purple-400" },
+      { name: "CONTEXTO", role: "Alinha a IA com o cenário atual do mercado.", color: "border-blue-500", text: "text-blue-400" },
+      { name: "PARÂMETROS DE EXECUÇÃO", role: "Limita o formato e tom de voz da saída.", color: "border-emerald-500", text: "text-emerald-400" },
+      { name: "CHAIN-OF-THOUGHT", role: "Força o raciocínio em etapas antes da resposta.", color: "border-orange-500", text: "text-orange-400" }
+    ];
+
     return {
       type: "prompt_anatomy" as VisualType,
       data: {
-        blocks: [
-          { name: "SYSTEM INSTRUCTION", role: "Define a base cognitiva e regras absolutas.", color: "border-purple-500", text: "text-purple-400" },
-          { name: "CONTEXTO", role: "Alinha a IA com o cenário atual do mercado.", color: "border-blue-500", text: "text-blue-400" },
-          { name: "PARÂMETROS DE EXECUÇÃO", role: "Limita o formato e tom de voz da saída.", color: "border-emerald-500", text: "text-emerald-400" },
-          { name: "CHAIN-OF-THOUGHT", role: "Força o raciocínio em etapas antes da resposta.", color: "border-orange-500", text: "text-orange-400" }
-        ],
-        outputPreview: "Análise estratégica de 4 quadrantes com alta precisão."
+        blocks,
+        outputPreview: level === 'Mestre' ? "Análise estratégica de 4 quadrantes com alta precisão." : 
+                       level === 'Avançado' ? "Texto altamente persuasivo e formatado perfeitamente." :
+                       level === 'Intermediário' ? "Resposta estruturada seguindo as regras." :
+                       "Resposta simples e direta à pergunta."
       }
     };
   }
   
   if (type === 'architecture') {
+    const nodes = level === 'Iniciante' ? [
+      { id: 1, title: "Input", desc: "Texto Base" },
+      { id: 2, title: "Output", desc: "Resumo" }
+    ] : level === 'Intermediário' ? [
+      { id: 1, title: "Coleta", desc: "Dados Iniciais" },
+      { id: 2, title: "Processamento", desc: "Análise IA" },
+      { id: 3, title: "Revisão", desc: "Ajuste Final" }
+    ] : level === 'Avançado' ? [
+      { id: 1, title: "Extração", desc: "Identificação de Sinais" },
+      { id: 2, title: "Síntese", desc: "Criação de Lógica" },
+      { id: 3, title: "Expansão", desc: "Geração de Conteúdo" }
+    ] : [
+      { id: 1, title: "Input Cru", desc: "Transcrição ou Dados Desestruturados" },
+      { id: 2, title: "Fase 1: Extração", desc: "Mapeamento de Padrões e Sinais" },
+      { id: 3, title: "Fase 2: Síntese", desc: "Construção do Core Message" },
+      { id: 4, title: "Output Final", desc: "Estratégia Pronta para Escala" }
+    ];
+
     return {
       type: "framework_map" as VisualType,
-      data: {
-        nodes: [
-          { id: 1, title: "Input Cru", desc: "Transcrição ou Dados Desestruturados" },
-          { id: 2, title: "Fase 1: Extração", desc: "Mapeamento de Padrões e Sinais" },
-          { id: 3, title: "Fase 2: Síntese", desc: "Construção do Core Message" },
-          { id: 4, title: "Output Final", desc: "Estratégia Pronta para Escala" }
-        ]
-      }
+      data: { nodes }
     };
   }
 
   if (type === 'conversion_system') {
+    const stages = level === 'Iniciante' ? [
+      { name: "Atenção", metric: "Visitas" },
+      { name: "Ação", metric: "Cliques" }
+    ] : level === 'Intermediário' ? [
+      { name: "Problema", metric: "Engajamento" },
+      { name: "Solução", metric: "Interesse" },
+      { name: "Oferta", metric: "Vendas" }
+    ] : [
+      { name: "Problema (Atenção)", metric: "100% Retenção Inicial" },
+      { name: "Agitação (Interesse)", metric: "60% Chegam Aqui" },
+      { name: "Causa (Desejo)", metric: "Construção de Lógica" },
+      { name: "Transformação (Ação)", metric: "Alta Taxa de Conversão" }
+    ];
+
     return {
       type: "funnel_illustration" as VisualType,
-      data: {
-        stages: [
-          { name: "Problema (Atenção)", metric: "100% Retenção Inicial" },
-          { name: "Agitação (Interesse)", metric: "60% Chegam Aqui" },
-          { name: "Causa (Desejo)", metric: "Construção de Lógica" },
-          { name: "Transformação (Ação)", metric: "Alta Taxa de Conversão" }
-        ]
-      }
+      data: { stages }
     };
   }
 
+  const scenes = level === 'Iniciante' ? [
+    { time: "0-5s", name: "Introdução", desc: "Apresenta o tema do vídeo.", img: thumbScripts },
+    { time: "5-30s", name: "Conteúdo", desc: "Explica o assunto principal.", img: thumbScripts },
+    { time: "30-40s", name: "Encerramento", desc: "Pede like e inscrição.", img: thumbScripts }
+  ] : level === 'Intermediário' ? [
+    { time: "0-3s", name: "Gancho", desc: "Chama a atenção rápido.", img: thumbScripts },
+    { time: "3-20s", name: "História", desc: "Conta uma breve narrativa.", img: thumbScripts },
+    { time: "20-40s", name: "Lição", desc: "Entrega o valor.", img: thumbScripts },
+    { time: "40-50s", name: "CTA", desc: "Chamada para ação clara.", img: thumbScripts }
+  ] : [
+    { time: "0-3s", name: "O Gancho Visual", desc: "Quebra de padrão, movimento brusco, promessa forte.", img: thumbScripts },
+    { time: "3-15s", name: "A Ponte", desc: "Conecta a promessa inicial com a dor real do usuário.", img: thumbScripts },
+    { time: "15-45s", name: "O Mecanismo", desc: "Explica COMO funciona, gerando 'Aha Moment'.", img: thumbScripts },
+    { time: "45-60s", name: "CTA Indireto", desc: "Chamada para ação focada em curiosidade.", img: thumbScripts }
+  ];
+
   return {
     type: "script_storyboard" as VisualType,
-    data: {
-      scenes: [
-        { time: "0-3s", name: "O Gancho Visual", desc: "Quebra de padrão, movimento brusco, promessa forte.", img: thumbScripts },
-        { time: "3-15s", name: "A Ponte", desc: "Conecta a promessa inicial com a dor real do usuário.", img: thumbScripts },
-        { time: "15-45s", name: "O Mecanismo", desc: "Explica COMO funciona, gerando 'Aha Moment'.", img: thumbScripts },
-        { time: "45-60s", name: "CTA Indireto", desc: "Chamada para ação focada em curiosidade (Ex: 'Olha o link na bio').", img: thumbScripts }
-      ]
-    }
+    data: { scenes }
   };
 };
 
-const createMockContent = (type: ContentType, title: string) => {
+const createMockContent = (type: ContentType, title: string, level: ContentLevel) => {
+  if (level === 'Iniciante') {
+    return `
+# ${title}
+## O Básico Funciona
+Este prompt é perfeito para quem está começando e precisa de resultados rápidos sem complicação.
+
+## O Prompt
+\`\`\`markdown
+Escreva um texto sobre [SEU TEMA].
+O texto deve ser voltado para [SEU PÚBLICO].
+Por favor, use um tom de voz [ESCOLHA O TOM].
+\`\`\`
+
+## Como usar
+Apenas substitua os colchetes pelas informações do seu negócio.
+`;
+  }
+  
+  if (level === 'Intermediário') {
+    return `
+# ${title}
+## Estrutura Aprimorada
+Para usuários que já entendem o básico e querem mais controle sobre o resultado da IA.
+
+## O Prompt
+\`\`\`markdown
+Aja como um especialista em [SUA ÁREA].
+Sua tarefa é criar [TIPO DE CONTEÚDO] sobre [TEMA].
+
+REGRAS:
+1. O público-alvo é [PÚBLICO] com nível de conhecimento [NÍVEL].
+2. O objetivo do texto é [OBJETIVO].
+3. O tom de voz deve ser [TOM DE VOZ].
+4. O formato deve incluir uma introdução, 3 pontos principais e uma conclusão com chamada para ação.
+
+Por favor, forneça 3 opções diferentes para eu escolher.
+\`\`\`
+
+## Dicas de Otimização
+Seja específico na seção de regras para evitar que a IA seja muito genérica.
+`;
+  }
+  
+  if (level === 'Avançado') {
+    return `
+# ${title}
+## Engenharia Avançada
+Este framework exige conhecimento de como os LLMs raciocinam. Utiliza restrições estritas e formatação profunda.
+
+## O Prompt
+\`\`\`markdown
+Você é um Copywriter Sênior especializado em funis de venda de [NICHO].
+
+SITUAÇÃO:
+Estamos lançando um produto que promete [PROMESSA] através do mecanismo [MECANISMO]. O problema atual do mercado é [PROBLEMA].
+
+TAREFA:
+Crie uma sequência de 3 e-mails de aquecimento usando o framework P.A.S. (Problema, Agitação, Solução).
+
+RESTRIÇÕES:
+- E-mail 1: Foque apenas em [FOCO 1]. Máximo de 150 palavras.
+- E-mail 2: Quebre a objeção [OBJEÇÃO]. Use storytelling.
+- E-mail 3: Faça o pitch de vendas focado em escassez [TIPO DE ESCASSEZ].
+
+ESTILO:
+Frases curtas. Parágrafos de no máximo 2 linhas. Vocabulário de 6ª série.
+Evite adjetivos genéricos como "incrível", "fantástico" ou "inovador".
+\`\`\`
+
+## Observações
+A qualidade do output depende diretamente da qualidade das informações que você colocar na seção SITUAÇÃO.
+`;
+  }
+
+  // Mestre
   if (type === 'master_prompt') {
     return `
 # ${title}
-## Engenharia de Contexto
+## Engenharia de Contexto Profunda (Nível Mestre)
 Este prompt foi desenvolvido para hackear a janela de contexto de modelos LLM de ponta, forçando-os a adotar uma persona estrita antes de gerar qualquer output. Ele utiliza a técnica de **Chain-of-Thought (CoT)** combinada com **Few-Shot Prompting**.
 
 ## O Código-Fonte (Prompt)
@@ -112,98 +231,39 @@ Este prompt foi desenvolvido para hackear a janela de contexto de modelos LLM de
 
 Aja como um Estrategista de Elite com 20 anos de experiência em [INSERIR_NICHO], com especialização profunda em psicologia comportamental e análise de dados.
 
-CONTEXTO:
-Estou lançando um produto focado em [INSERIR_PRODUTO]. O maior desafio do meu público é [INSERIR_DOR_PRINCIPAL]. 
+CONTEXTO ESTRUTURAL:
+- Produto/Oferta: [INSERIR_PRODUTO]
+- Dor Central do Mercado: [INSERIR_DOR_PRINCIPAL]
+- Posição da Concorrência: [INSERIR_FALHA_DA_CONCORRENCIA]
 
-PARÂMETROS DE EXECUÇÃO:
-1. Tom de Voz: Autoritário, cirúrgico, sem jargões desnecessários, focado em resultados.
-2. Formato de Saída: Matriz de 4 quadrantes (Ação, Impacto, Esforço, Risco) seguida de um plano de execução de 3 fases.
-3. Restrições: Não use listas genéricas. Traga apenas insights contraintuitivos ou táticas de alto nível.
+PARÂMETROS DE EXECUÇÃO ESTRITA:
+1. Tom de Voz: Autoritário, cirúrgico, sem jargões, focado em mecanismos causais.
+2. Formato de Saída: Matriz de 4 quadrantes (Ação, Impacto, Esforço, Risco) seguida de um plano de execução tático de 3 fases.
+3. Restrições Absolutas: PROIBIDO usar listas genéricas. PROIBIDO usar palavras como "revolucionário", "mergulhar", "desvendar". Traga apenas insights contraintuitivos ou táticas assimétricas.
 
-PROCESSO DE PENSAMENTO (CoT):
-Antes de gerar a resposta final, analise silenciosamente o mercado de [INSERIR_NICHO] e identifique 3 falhas comuns que os concorrentes cometem. Use essas falhas como base para a estratégia.
+PROCESSO DE PENSAMENTO OBRIGATÓRIO (CoT):
+Antes de gerar a resposta final, crie um bloco de código <thinking> onde você analisa silenciosamente o mercado de [INSERIR_NICHO], identifica 3 vieses cognitivos comuns do público-alvo, e mapeia como a nossa oferta invalida a abordagem tradicional.
 
-EXECUTE.
+EXECUTE A PARTIR DAQUI.
 \`\`\`
 
-## Guia de Implementação
-- **Temperatura Recomendada:** 0.4 (para maior precisão analítica).
-- **Variáveis Chave:** Preencha os colchetes com máxima especificidade. "Vendas" é fraco; "Vendas B2B High-Ticket de SaaS" é forte.
-- **Caso de Uso Principal:** Planejamento estratégico inicial antes de criar campanhas ou produtos.
+## Guia de Implementação Tática
+- **Temperatura Recomendada:** 0.2 a 0.4 (para minimizar alucinação e maximizar precisão lógica).
+- **Variáveis Críticas:** A qualidade do output cai 80% se os colchetes não forem preenchidos com ultra-especificidade.
+- **Caso de Uso Principal:** Desenho de estratégia oceano azul antes de gastar qualquer verba em tráfego ou produção de copy.
 `;
   }
   
-  if (type === 'architecture') {
-    return `
-# ${title}
-## Visão Sistêmica
-Este framework não é um mero comando; é uma arquitetura de múltiplos passos desenhada para orquestrar LLMs em esteiras de produção complexas.
-
-## Diagrama Lógico
-\`[Fase 1: Extração] -> [Fase 2: Síntese] -> [Fase 3: Expansão] -> [Fase 4: Refinamento]\`
-
-## Prompt da Fase 1: A Extração de Ouro
-\`\`\`markdown
-Eu vou te fornecer uma transcrição crua de uma reunião de 1 hora.
-Sua tarefa é agir como um Analista de Sinais.
-
-DIRETRIZES DE EXTRAÇÃO:
-- Ignore "small talk" e introduções.
-- Extraia apenas: 
-  A) Padrões de comportamento do cliente.
-  B) Objeções não verbais (hesitações, repetições).
-  C) Gatilhos emocionais acionados.
-
-FORMATO:
-JSON estruturado contendo { "padroes": [], "objecoes": [], "gatilhos": [] }
-
-[COLE A TRANSCRIÇÃO AQUI]
-\`\`\`
-
-## Prompt da Fase 2: Síntese Estratégica
-\`\`\`markdown
-Assuma o papel de Head de Produto. 
-Usando o JSON gerado no passo anterior, construa um argumento de vendas central (Core Message) que invalide diretamente a objeção mais crítica identificada.
-\`\`\`
-
-## Instruções de Escala
-Você pode automatizar esta arquitetura conectando a API da OpenAI ao Make.com, passando o output da Fase 1 diretamente como input da Fase 2.
-`;
-  }
-
   return `
 # ${title}
-## Engenharia Reversa
-Este material foi criado através da desconstrução das peças de maior conversão do mercado global nos últimos 6 meses, traduzindo a estrutura psicológica para prompts de IA.
+## Arquitetura de Mestre
+Este não é um prompt, é um sistema autônomo projetado para ser encadeado.
 
-## A Estrutura Base
-A estrutura segue o modelo **PACT** (Problema, Agitação, Causa, Transformação).
-
-## O Prompt Gerador
+## O Sistema
 \`\`\`markdown
-Você é um Copywriter de Resposta Direta de Elite, especializado em funis de alto ticket.
-
-Sua tarefa é criar um VSL (Video Sales Letter) Lead de 3 minutos usando o framework PACT.
-
-DADOS DO PRODUTO:
-- Oferta: [INSERIR]
-- Mecanismo Único: [INSERIR]
-- Inimigo Comum: [INSERIR]
-
-REGRAS ESTILÍSTICAS:
-- Frases curtas (máximo 15 palavras).
-- Padrões de interrupção a cada 3 parágrafos.
-- Nível de leitura: 6ª série (Simples e direto).
-
-Estruture o output com marcações visuais de edição:
-[Corte Rápido]
-[Zoom In]
-[Música de Tensão]
+[O prompt completo de nível mestre com múltiplas etapas e lógica condicional estaria aqui]
 \`\`\`
-
-## Notas do Autor
-O segredo deste prompt não é pedir um texto de vendas, mas sim forçar o LLM a pensar em elementos de ritmo de vídeo ([Corte Rápido]), o que afeta drasticamente a cadência do texto gerado, tornando-o muito mais dinâmico.
-`;
+  `;
 };
 
 const createMockItems = (
@@ -213,87 +273,98 @@ const createMockItems = (
   prefix: string,
   tools: ContentTool[]
 ): ContentItem[] => {
-  const premiumTitles = [
-    'O Sistema de Persuasão Omnicanal',
-    'Matriz de Criação de Autoridade',
-    'Prompt Zero: Inicialização de Contexto Profundo',
-    'Engenharia de Prompt para High-Ticket',
-    'Arquitetura de Funil Autônomo',
-    'Protocolo de Síntese de Conhecimento',
-    'O Cérebro de Copywriting de Elite'
+  const titles = [
+    'Fundamentos de',
+    'Táticas de',
+    'O Sistema de',
+    'A Matriz de',
+    'Protocolo Avançado de',
+    'Engenharia de',
+    'O Cérebro de'
   ];
 
   return Array.from({ length: count }).map((_, i) => {
-    const title = `${premiumTitles[i % premiumTitles.length]} - V.${Math.floor(Math.random() * 5) + 1}.0`;
-    const visual = getVisualData(type);
+    // Distribute levels: 20% Iniciante, 30% Intermediário, 30% Avançado, 20% Mestre
+    const levelRand = Math.random();
+    let level: ContentLevel = "Iniciante";
+    if (levelRand > 0.8) level = "Mestre";
+    else if (levelRand > 0.5) level = "Avançado";
+    else if (levelRand > 0.2) level = "Intermediário";
+
+    const titlePrefix = titles[Math.floor(Math.random() * titles.length)];
+    const title = `${titlePrefix} ${prefix} - V.${Math.floor(Math.random() * 5) + 1}.0`;
+    const visual = getVisualData(type, level);
     
     return {
-      id: `${type}-${i + 1}`,
+      id: `${type}-${level.toLowerCase()}-${i + 1}`,
       type,
       title: title,
-      description: `Uma estrutura profunda de engenharia de prompts focada em extrair o máximo poder cognitivo dos modelos de linguagem para ${['escala de conversão', 'análise sistêmica', 'produção de escala', 'estratégia avançada'][i % 4]}.`,
-      content: createMockContent(type, title),
+      description: `Uma estrutura de engenharia focada em extrair o melhor dos modelos de linguagem para ${['conversão', 'análise', 'produção', 'estratégia'][i % 4]}. Desenvolvido para nível ${level}.`,
+      content: createMockContent(type, title, level),
       image,
       tags: [
-        ['Engenharia Avançada', 'Lógica de Sistemas', 'Chain-of-Thought'][i % 3],
-        ['Alta Conversão', 'Escala', 'Automação'][i % 3],
-        ['Estratégia', 'Tático', 'Operacional'][i % 3]
+        level,
+        ['Marketing', 'Vendas', 'Copywriting', 'Estratégia', 'Gestão'][i % 5],
+        ['Alta Conversão', 'Escala', 'Automação', 'Precisão'][i % 4]
       ],
-      level: ['Especialista', 'Avançado', 'Avançado'][i % 3] as ContentLevel,
+      level,
       tools: [tools[i % tools.length]],
-      isPremium: i % 4 === 0,
-      isNew: i < 3,
+      isPremium: level === 'Mestre' || level === 'Avançado' && i % 3 === 0,
+      isNew: i < 5,
       visualType: visual.type,
       visualData: visual.data,
     };
   });
 };
 
-const allPrompts = createMockItems(20, "master_prompt", thumbPrompts, "Master", ["Claude 3.5 Sonnet", "ChatGPT Plus"]);
-const allFrameworks = createMockItems(20, "architecture", thumbFrameworks, "Arquitetura", ["Agnóstico"]);
-const allCopys = createMockItems(20, "conversion_system", thumbCopys, "Sistema", ["ChatGPT Plus", "Claude 3.5 Sonnet"]);
-const allScripts = createMockItems(20, "narrative_engine", thumbScripts, "Narrativa", ["Claude 3.5 Sonnet", "Gemini Advanced"]);
+const allPrompts = createMockItems(30, "master_prompt", thumbPrompts, "Prompting", ["Claude 3.5 Sonnet", "ChatGPT Plus"]);
+const allFrameworks = createMockItems(30, "architecture", thumbFrameworks, "Arquiteturas", ["Agnóstico"]);
+const allCopys = createMockItems(30, "conversion_system", thumbCopys, "Persuasão", ["ChatGPT Plus", "Claude 3.5 Sonnet"]);
+const allScripts = createMockItems(30, "narrative_engine", thumbScripts, "Retenção", ["Claude 3.5 Sonnet", "Gemini Advanced"]);
 
 export const allContent = [...allPrompts, ...allFrameworks, ...allCopys, ...allScripts];
 
+export const getItemsByLevel = (level: ContentLevel) => {
+  return allContent.filter(item => item.level === level);
+};
+
+export const getItemsByType = (type: ContentType) => {
+  return allContent.filter(item => item.type === type);
+};
+
 export const homeCategories: Category[] = [
   {
-    id: "trending-elite",
-    title: "Em Alta Entre Especialistas",
-    items: [allPrompts[0], allFrameworks[2], allCopys[5], allScripts[1], allPrompts[10], allFrameworks[7]],
+    id: "level-mestre",
+    title: "Classe Mestre (Apenas Elite)",
+    items: getItemsByLevel("Mestre").slice(0, 10),
   },
   {
-    id: "architectures",
-    title: "Arquiteturas Sistêmicas",
-    items: allFrameworks.slice(0, 10),
+    id: "level-avancado",
+    title: "Nível Avançado",
+    items: getItemsByLevel("Avançado").slice(0, 10),
   },
   {
-    id: "master-prompts",
-    title: "Master Prompts (Engenharia Profunda)",
-    items: allPrompts.slice(0, 10),
+    id: "level-intermediario",
+    title: "Nível Intermediário",
+    items: getItemsByLevel("Intermediário").slice(0, 10),
   },
   {
-    id: "conversion",
-    title: "Sistemas de Conversão",
-    items: allCopys.slice(0, 10),
-  },
-  {
-    id: "narrative",
-    title: "Motores Narrativos",
-    items: allScripts.slice(0, 10),
+    id: "level-iniciante",
+    title: "Fundamentos (Comece Aqui)",
+    items: getItemsByLevel("Iniciante").slice(0, 10),
   },
 ];
 
-const heroVisual = getVisualData('architecture');
+const heroVisual = getVisualData('architecture', 'Mestre');
 export const heroContent: ContentItem = {
   id: "hero-featured",
   type: "architecture",
   title: "A Matriz de Criação Infinita V.2",
-  description: "Uma arquitetura de engenharia de prompt avançada que utiliza multi-agentes simulados e chain-of-thought para escalar produção de conteúdo mantendo 100% de coerência tonal e autoridade técnica. O segredo dos Top Players.",
-  content: createMockContent('architecture', 'A Matriz de Criação Infinita V.2'),
+  description: "Uma arquitetura de engenharia de prompt de Nível Mestre que utiliza multi-agentes simulados e chain-of-thought para escalar produção mantendo 100% de coerência tonal. O segredo dos Top Players.",
+  content: createMockContent('architecture', 'A Matriz de Criação Infinita V.2', 'Mestre'),
   image: heroBg,
-  tags: ["Masterclass", "Chain-of-Thought", "Multi-agentes"],
-  level: "Especialista",
+  tags: ["Mestre", "Chain-of-Thought", "Multi-agentes"],
+  level: "Mestre",
   tools: ["Claude 3.5 Sonnet", "ChatGPT Plus"],
   isPremium: true,
   isNew: true,

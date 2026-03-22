@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,11 +23,11 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Início", path: "/" },
-    { name: "Prompts", path: "/category/prompts" },
-    { name: "Frameworks", path: "/category/frameworks" },
-    { name: "Copys", path: "/category/copys" },
-    { name: "Scripts", path: "/category/scripts" },
-    { name: "Minha Lista", path: "/my-list" },
+    { name: "Nível Mestre", path: "/level/Mestre" },
+    { name: "Nível Avançado", path: "/level/Avançado" },
+    { name: "Intermediário", path: "/level/Intermediário" },
+    { name: "Iniciante", path: "/level/Iniciante" },
+    { name: "Meu Arsenal", path: "/my-list" },
   ];
 
   return (
@@ -71,7 +71,10 @@ export default function Navbar() {
 
         {/* Right side icons */}
         <div className="flex items-center gap-4 md:gap-6">
-          <button className="text-white hover:text-gray-300 transition-colors">
+          <button 
+            className="text-white hover:text-gray-300 transition-colors"
+            onClick={() => setLocation("/search")}
+          >
             <Search className="w-5 h-5 md:w-6 md:h-6" />
           </button>
           

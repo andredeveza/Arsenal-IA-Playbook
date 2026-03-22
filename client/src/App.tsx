@@ -6,12 +6,21 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import ContentDetails from "@/pages/content";
+import LevelView from "@/pages/level";
+import MyList from "@/pages/my-list";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/content/:id" component={ContentDetails} />
+      <Route path="/level/:levelName" component={LevelView} />
+      <Route path="/my-list" component={MyList} />
+      {/* Route for search if needed later */}
+      <Route path="/search" component={() => {
+        window.location.href = '/'; 
+        return null;
+      }} />
       <Route component={NotFound} />
     </Switch>
   );

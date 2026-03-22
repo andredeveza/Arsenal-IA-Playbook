@@ -3,6 +3,7 @@ import { Play, Plus, ChevronDown, Check, Zap, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
+import { useUserStore } from "@/store/userStore";
 
 interface ContentCardProps {
   item: ContentItem;
@@ -10,11 +11,18 @@ interface ContentCardProps {
 
 export default function ContentCard({ item }: ContentCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
   const [, setLocation] = useLocation();
+  const { isFavorite, toggleFavorite } = useUserStore();
+  
+  const isAdded = isFavorite(item.id);
 
   const handleInteract = () => {
     setLocation(`/content/${item.id}`);
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite(item.id);
   };
 
   const getTypeColor = (type: string) => {
@@ -24,6 +32,16 @@ export default function ContentCard({ item }: ContentCardProps) {
       case 'conversion_system': return 'from-emerald-500 to-teal-600';
       case 'narrative_engine': return 'from-orange-500 to-red-600';
       default: return 'from-primary to-orange-500';
+    }
+  };
+
+  const getLevelColor = (level: string) => {
+    switch(level) {
+      case 'Iniciante': return 'text-green-400 border-green-500/30 bg-green-500/10';
+      case 'Intermediário': return 'text-blue-400 border-blue-500/30 bg-blue-500/10';
+      case 'Avançado': return 'text-purple-400 border-purple-500/30 bg-purple-500/10';
+      case 'Mestre': return 'text-red-500 border-red-500/50 bg-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.2)] font-black tracking-widest';
+      default: return 'text-gray-300 border-white/10 bg-white/5';
     }
   };
 
@@ -49,8 +67,8 @@ export default function ContentCard({ item }: ContentCardProps) {
       
       <div className="absolute bottom-4 left-5 right-4 group-hover:opacity-0 transition-opacity duration-300">
         <div className="flex items-center gap-2 mb-2">
-          <div className="text-[10px] text-gray-300 font-bold tracking-widest uppercase bg-white/10 backdrop-blur-sm px-2 py-0.5 rounded-sm border border-white/5">
-            {item.type.replace('_', ' ')}
+          <div className={cn("text-[10px] font-bold uppercase px-2 py-0.5 rounded-sm border", getLevelColor(item.level))}>
+            {item.level}
           </div>
           {item.isNew && (
             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
@@ -98,7 +116,7 @@ export default function ContentCard({ item }: ContentCardProps) {
               
               <button 
                 className="w-12 h-12 rounded-full bg-white/5 border border-white/20 text-white flex items-center justify-center hover:border-white hover:bg-white/10 transition-all shadow-lg hover:scale-105 active:scale-95 backdrop-blur-md"
-                onClick={(e) => { e.stopPropagation(); setIsAdded(!isAdded); }}
+                onClick={handleToggleFavorite}
               >
                 {isAdded ? <Check className="w-6 h-6 text-green-500" /> : <Plus className="w-6 h-6" />}
               </button>
@@ -113,8 +131,7 @@ export default function ContentCard({ item }: ContentCardProps) {
           </div>
           
           <div className="flex items-center gap-3 text-sm font-bold mb-3">
-            <span className="text-green-500 tracking-wide">99% Match</span>
-            <span className="text-gray-300 border border-white/10 bg-white/5 px-2 py-0.5 rounded text-xs">{item.level}</span>
+            <span className={cn("px-2 py-0.5 rounded text-xs border", getLevelColor(item.level))}>{item.level}</span>
             {item.isPremium && <span className="text-amber-500 text-xs flex items-center gap-1"><Sparkles className="w-3 h-3"/> PREMIUM</span>}
           </div>
 

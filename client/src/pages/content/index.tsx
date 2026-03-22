@@ -7,13 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useUserStore } from "@/store/userStore";
 
 export default function ContentDetails() {
   const [, params] = useRoute("/content/:id");
   const { toast } = useToast();
-  const [isAdded, setIsAdded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [content, setContent] = useState<any>(null);
+  
+  const { isFavorite, toggleFavorite, addToHistory } = useUserStore();
+  const isAdded = content ? isFavorite(content.id) : false;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -21,9 +24,10 @@ export default function ContentDetails() {
       const found = allContent.find(c => c.id === params.id);
       if (found) {
         setContent(found);
+        addToHistory(found.id);
       }
     }
-  }, [params?.id]);
+  }, [params?.id, addToHistory]);
 
   if (!content) {
     return (
@@ -43,12 +47,30 @@ export default function ContentDetails() {
     });
   };
 
+  const handleToggleFavorite = () => {
+    toggleFavorite(content.id);
+    toast({
+      title: isAdded ? "Removido do Arsenal" : "Adicionado ao Arsenal",
+      description: isAdded ? "Item removido da sua lista." : "Item salvo na sua lista para acesso rápido.",
+    });
+  };
+
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'master_prompt': return <TerminalSquare className="w-4 h-4 mr-2" />;
       case 'architecture': return <Layers className="w-4 h-4 mr-2" />;
       case 'conversion_system': return <BookOpen className="w-4 h-4 mr-2" />;
       default: return <Sparkles className="w-4 h-4 mr-2" />;
+    }
+  };
+
+  const getLevelColor = (level: string) => {
+    switch(level) {
+      case 'Iniciante': return 'text-green-400 border-green-500/30 bg-green-500/10';
+      case 'Intermediário': return 'text-blue-400 border-blue-500/30 bg-blue-500/10';
+      case 'Avançado': return 'text-purple-400 border-purple-500/30 bg-purple-500/10';
+      case 'Mestre': return 'text-red-500 border-red-500/50 bg-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.2)] font-black tracking-widest';
+      default: return 'text-gray-300 border-white/10 bg-white/5';
     }
   };
 
@@ -60,7 +82,7 @@ export default function ContentDetails() {
           className="mb-8 flex items-center text-gray-400 hover:text-white transition-colors group text-sm font-medium"
         >
           <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-          Voltar para o Arsenal
+          Voltar
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
@@ -82,7 +104,7 @@ export default function ContentDetails() {
                 )}
                 {content.isNew && (
                   <Badge className="bg-primary/20 text-primary border border-primary/30 font-black tracking-widest py-1.5 px-4 rounded-sm">
-                    NOVO LANÇAMENTO
+                    NOVO
                   </Badge>
                 )}
               </div>
@@ -92,12 +114,9 @@ export default function ContentDetails() {
               </h1>
               
               <div className="flex items-center gap-6 text-sm font-medium border-b border-white/10 pb-8">
-                <span className="text-green-500 font-bold text-base tracking-wide flex items-center">
-                  <Zap className="w-4 h-4 mr-1 fill-current" /> 99% Relevância
-                </span>
-                <div className="flex items-center text-gray-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gray-500 mr-2"></span>
-                  Nível: <span className="text-white ml-1 font-bold">{content.level}</span>
+                <div className={cn("px-3 py-1 rounded-full border flex items-center", getLevelColor(content.level))}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-current mr-2"></span>
+                  Nível: <span className="ml-1 font-bold">{content.level}</span>
                 </div>
                 <div className="flex items-center text-gray-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">
                   <span className="w-1.5 h-1.5 rounded-full bg-gray-500 mr-2"></span>
@@ -197,7 +216,7 @@ export default function ContentDetails() {
                   <Button 
                     variant="outline" 
                     className={`col-span-2 py-7 border-white/10 rounded-xl text-sm font-bold uppercase tracking-widest transition-all ${isAdded ? 'bg-white/10 text-white border-white/20' : 'bg-zinc-900/50 hover:bg-zinc-800 text-gray-300'}`}
-                    onClick={() => setIsAdded(!isAdded)}
+                    onClick={handleToggleFavorite}
                   >
                     {isAdded ? <Check className="w-5 h-5 mr-2 text-green-500" /> : <Plus className="w-5 h-5 mr-2" />}
                     {isAdded ? 'No Arsenal' : 'Salvar'}
@@ -218,6 +237,7 @@ export default function ContentDetails() {
                       size="icon"
                       className="w-full h-full bg-zinc-900/50 hover:bg-zinc-800 border-white/10 text-gray-400 hover:text-white rounded-xl transition-all"
                       onClick={() => {
+                        navigator.clipboard.writeText(window.location.href);
                         toast({ title: "Link copiado para compartilhar" });
                       }}
                     >
