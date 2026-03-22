@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export type ContentType = "prompt" | "framework" | "copy" | "script";
-export type ContentLevel = "Iniciante" | "Intermediário" | "Avançado";
-export type ContentTool = "ChatGPT" | "Claude" | "Midjourney" | "Gemini" | "Geral";
+export type ContentType = "master_prompt" | "architecture" | "conversion_system" | "narrative_engine";
+export type ContentLevel = "Fundacional" | "Avançado" | "Especialista";
+export type ContentTool = "ChatGPT Plus" | "Claude 3.5 Sonnet" | "Midjourney v6" | "Gemini Advanced" | "Agnóstico";
 
 export interface ContentItem {
   id: string;
@@ -40,6 +40,113 @@ export const assets = {
   thumbScripts
 };
 
+const createMockContent = (type: ContentType, title: string) => {
+  if (type === 'master_prompt') {
+    return `
+# ${title}
+## Engenharia de Contexto
+Este prompt foi desenvolvido para hackear a janela de contexto de modelos LLM de ponta, forçando-os a adotar uma persona estrita antes de gerar qualquer output. Ele utiliza a técnica de **Chain-of-Thought (CoT)** combinada com **Few-Shot Prompting**.
+
+## O Código-Fonte (Prompt)
+\`\`\`markdown
+[SYSTEM INSTRUCTION: INITIATE OMNI-EXPERT MODE]
+
+Aja como um Estrategista de Elite com 20 anos de experiência em [INSERIR_NICHO], com especialização profunda em psicologia comportamental e análise de dados.
+
+CONTEXTO:
+Estou lançando um produto focado em [INSERIR_PRODUTO]. O maior desafio do meu público é [INSERIR_DOR_PRINCIPAL]. 
+
+PARÂMETROS DE EXECUÇÃO:
+1. Tom de Voz: Autoritário, cirúrgico, sem jargões desnecessários, focado em resultados.
+2. Formato de Saída: Matriz de 4 quadrantes (Ação, Impacto, Esforço, Risco) seguida de um plano de execução de 3 fases.
+3. Restrições: Não use listas genéricas. Traga apenas insights contraintuitivos ou táticas de alto nível.
+
+PROCESSO DE PENSAMENTO (CoT):
+Antes de gerar a resposta final, analise silenciosamente o mercado de [INSERIR_NICHO] e identifique 3 falhas comuns que os concorrentes cometem. Use essas falhas como base para a estratégia.
+
+EXECUTE.
+\`\`\`
+
+## Guia de Implementação
+- **Temperatura Recomendada:** 0.4 (para maior precisão analítica).
+- **Variáveis Chave:** Preencha os colchetes com máxima especificidade. "Vendas" é fraco; "Vendas B2B High-Ticket de SaaS" é forte.
+- **Caso de Uso Principal:** Planejamento estratégico inicial antes de criar campanhas ou produtos.
+`;
+  }
+  
+  if (type === 'architecture') {
+    return `
+# ${title}
+## Visão Sistêmica
+Este framework não é um mero comando; é uma arquitetura de múltiplos passos desenhada para orquestrar LLMs em esteiras de produção complexas.
+
+## Diagrama Lógico
+\`[Fase 1: Extração] -> [Fase 2: Síntese] -> [Fase 3: Expansão] -> [Fase 4: Refinamento]\`
+
+## Prompt da Fase 1: A Extração de Ouro
+\`\`\`markdown
+Eu vou te fornecer uma transcrição crua de uma reunião de 1 hora.
+Sua tarefa é agir como um Analista de Sinais.
+
+DIRETRIZES DE EXTRAÇÃO:
+- Ignore "small talk" e introduções.
+- Extraia apenas: 
+  A) Padrões de comportamento do cliente.
+  B) Objeções não verbais (hesitações, repetições).
+  C) Gatilhos emocionais acionados.
+
+FORMATO:
+JSON estruturado contendo { "padroes": [], "objecoes": [], "gatilhos": [] }
+
+[COLE A TRANSCRIÇÃO AQUI]
+\`\`\`
+
+## Prompt da Fase 2: Síntese Estratégica
+\`\`\`markdown
+Assuma o papel de Head de Produto. 
+Usando o JSON gerado no passo anterior, construa um argumento de vendas central (Core Message) que invalide diretamente a objeção mais crítica identificada.
+\`\`\`
+
+## Instruções de Escala
+Você pode automatizar esta arquitetura conectando a API da OpenAI ao Make.com, passando o output da Fase 1 diretamente como input da Fase 2.
+`;
+  }
+
+  return `
+# ${title}
+## Engenharia Reversa
+Este material foi criado através da desconstrução das peças de maior conversão do mercado global nos últimos 6 meses, traduzindo a estrutura psicológica para prompts de IA.
+
+## A Estrutura Base
+A estrutura segue o modelo **PACT** (Problema, Agitação, Causa, Transformação).
+
+## O Prompt Gerador
+\`\`\`markdown
+Você é um Copywriter de Resposta Direta de Elite, especializado em funis de alto ticket.
+
+Sua tarefa é criar um VSL (Video Sales Letter) Lead de 3 minutos usando o framework PACT.
+
+DADOS DO PRODUTO:
+- Oferta: [INSERIR]
+- Mecanismo Único: [INSERIR]
+- Inimigo Comum: [INSERIR]
+
+REGRAS ESTILÍSTICAS:
+- Frases curtas (máximo 15 palavras).
+- Padrões de interrupção a cada 3 parágrafos.
+- Nível de leitura: 6ª série (Simples e direto).
+
+Estruture o output com marcações visuais de edição:
+[Corte Rápido]
+[Zoom In]
+[Música de Tensão]
+\`\`\`
+
+## Notas do Autor
+O segredo deste prompt não é pedir um texto de vendas, mas sim forçar o LLM a pensar em elementos de ritmo de vídeo ([Corte Rápido]), o que afeta drasticamente a cadência do texto gerado, tornando-o muito mais dinâmico.
+`;
+};
+
 const createMockItems = (
   count: number,
   type: ContentType,
@@ -47,99 +154,83 @@ const createMockItems = (
   prefix: string,
   tools: ContentTool[]
 ): ContentItem[] => {
-  return Array.from({ length: count }).map((_, i) => ({
-    id: `${type}-${i + 1}`,
-    type,
-    title: `${prefix} ${i + 1}: ${['Mestre da Conversão', 'Gênio Analítico', 'Criador de Mundos', 'Estrategista Viral'][i % 4]}`,
-    description: `Um ${type} poderoso para elevar seus resultados a outro nível. Ideal para profissionais exigentes.`,
-    content: `
-# ${prefix} ${i + 1}
-## O Problema
-Muitas vezes você não consegue o resultado esperado porque não estruturou corretamente a requisição.
+  const premiumTitles = [
+    'O Sistema de Persuasão Omnicanal',
+    'Matriz de Criação de Autoriade',
+    'Prompt Zero: Inicialização de Contexto Profundo',
+    'Engenharia de Prompt para High-Ticket',
+    'Arquitetura de Funil Autônomo',
+    'Protocolo de Síntese de Conhecimento',
+    'O Cérebro de Copywriting de Elite'
+  ];
 
-## O ${type === 'prompt' ? 'Prompt' : type === 'framework' ? 'Framework' : type === 'copy' ? 'Copy' : 'Script'}
-\`\`\`markdown
-Aja como um especialista em [Sua Área].
-Eu preciso que você me ajude a [Seu Objetivo].
-Considere os seguintes parâmetros:
-1. Público-alvo: [Público]
-2. Tom de voz: [Tom]
-3. Formato: [Formato]
-\`\`\`
-
-## Como usar
-1. Copie o texto acima
-2. Substitua os campos entre colchetes
-3. Cole no seu LLM favorito
-    `,
-    image,
-    tags: [
-      ['Marketing', 'Vendas', 'Copywriting'][i % 3],
-      ['SEO', 'Social Media', 'E-mail'][i % 3],
-      ['Estratégia', 'Tático', 'Operacional'][i % 3]
-    ],
-    level: ['Iniciante', 'Intermediário', 'Avançado'][i % 3] as ContentLevel,
-    tools: [tools[i % tools.length]],
-    isPremium: i % 5 === 0,
-    isNew: i < 5,
-  }));
+  return Array.from({ length: count }).map((_, i) => {
+    const title = `${premiumTitles[i % premiumTitles.length]} - V.${Math.floor(Math.random() * 5) + 1}.0`;
+    return {
+      id: `${type}-${i + 1}`,
+      type,
+      title: title,
+      description: `Uma estrutura profunda de engenharia de prompts focada em extrair o máximo poder cognitivo dos modelos de linguagem para ${['escala de conversão', 'análise sistêmica', 'produção de escala', 'estratégia avançada'][i % 4]}.`,
+      content: createMockContent(type, title),
+      image,
+      tags: [
+        ['Engenharia Avançada', 'Lógica de Sistemas', 'Chain-of-Thought'][i % 3],
+        ['Alta Conversão', 'Escala', 'Automação'][i % 3],
+        ['Estratégia', 'Tático', 'Operacional'][i % 3]
+      ],
+      level: ['Especialista', 'Avançado', 'Avançado'][i % 3] as ContentLevel,
+      tools: [tools[i % tools.length]],
+      isPremium: i % 4 === 0,
+      isNew: i < 3,
+    };
+  });
 };
 
-const allPrompts = createMockItems(25, "prompt", thumbPrompts, "Prompt", ["ChatGPT", "Claude"]);
-const allFrameworks = createMockItems(25, "framework", thumbFrameworks, "Framework", ["Geral"]);
-const allCopys = createMockItems(25, "copy", thumbCopys, "Copy", ["ChatGPT", "Claude", "Gemini"]);
-const allScripts = createMockItems(25, "script", thumbScripts, "Script", ["ChatGPT", "Claude"]);
+const allPrompts = createMockItems(20, "master_prompt", thumbPrompts, "Master", ["Claude 3.5 Sonnet", "ChatGPT Plus"]);
+const allFrameworks = createMockItems(20, "architecture", thumbFrameworks, "Arquitetura", ["Agnóstico"]);
+const allCopys = createMockItems(20, "conversion_system", thumbCopys, "Sistema", ["ChatGPT Plus", "Claude 3.5 Sonnet"]);
+const allScripts = createMockItems(20, "narrative_engine", thumbScripts, "Narrativa", ["Claude 3.5 Sonnet", "Gemini Advanced"]);
 
 export const allContent = [...allPrompts, ...allFrameworks, ...allCopys, ...allScripts];
 
 export const homeCategories: Category[] = [
   {
-    id: "continue-watching",
-    title: "Continue Explorando",
+    id: "trending-elite",
+    title: "Em Alta Entre Especialistas",
     items: [allPrompts[0], allFrameworks[2], allCopys[5], allScripts[1], allPrompts[10], allFrameworks[7]],
   },
   {
-    id: "new-releases",
-    title: "Adicionados Recentemente",
-    items: allContent.filter(item => item.isNew).slice(0, 10),
+    id: "architectures",
+    title: "Arquiteturas Sistêmicas",
+    items: allFrameworks.slice(0, 10),
   },
   {
-    id: "prompts-master",
-    title: "Prompts de Mestre (Top 1%)",
-    items: allPrompts.slice(0, 12),
+    id: "master-prompts",
+    title: "Master Prompts (Engenharia Profunda)",
+    items: allPrompts.slice(0, 10),
   },
   {
-    id: "frameworks-strategy",
-    title: "Frameworks Estratégicos",
-    items: allFrameworks.slice(0, 12),
+    id: "conversion",
+    title: "Sistemas de Conversão",
+    items: allCopys.slice(0, 10),
   },
   {
-    id: "viral-scripts",
-    title: "Scripts Virais para Vídeos",
-    items: allScripts.slice(0, 12),
-  },
-  {
-    id: "high-ticket-copy",
-    title: "Copys High-Ticket",
-    items: allCopys.slice(0, 12),
-  },
-  {
-    id: "premium-exclusive",
-    title: "Arsenal Premium Exclusivo",
-    items: allContent.filter(item => item.isPremium).slice(0, 15),
+    id: "narrative",
+    title: "Motores Narrativos",
+    items: allScripts.slice(0, 10),
   },
 ];
 
 export const heroContent: ContentItem = {
   id: "hero-featured",
-  type: "framework",
-  title: "A Matriz de Criação Infinita",
-  description: "O framework definitivo utilizado por top creators para gerar meses de conteúdo em apenas algumas horas usando Inteligência Artificial avançada.",
-  content: "# A Matriz de Criação Infinita\n\nEste é o framework principal...",
+  type: "architecture",
+  title: "A Matriz de Criação Infinita V.2",
+  description: "Uma arquitetura de engenharia de prompt avançada que utiliza multi-agentes simulados e chain-of-thought para escalar produção de conteúdo mantendo 100% de coerência tonal e autoridade técnica. O segredo dos Top Players.",
+  content: createMockContent('architecture', 'A Matriz de Criação Infinita V.2'),
   image: heroBg,
-  tags: ["Masterclass", "Conteúdo", "Estratégia"],
-  level: "Avançado",
-  tools: ["ChatGPT", "Claude"],
+  tags: ["Masterclass", "Chain-of-Thought", "Multi-agentes"],
+  level: "Especialista",
+  tools: ["Claude 3.5 Sonnet", "ChatGPT Plus"],
   isPremium: true,
   isNew: true,
 };
