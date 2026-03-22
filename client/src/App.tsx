@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -16,11 +16,15 @@ function Router() {
       <Route path="/content/:id" component={ContentDetails} />
       <Route path="/level/:levelName" component={LevelView} />
       <Route path="/my-list" component={MyList} />
-      {/* Route for search if needed later */}
-      <Route path="/search" component={() => {
-        window.location.href = '/'; 
-        return null;
-      }} />
+      
+      {/* Redirect safely instead of window.location for not fully implemented routes */}
+      <Route path="/search">
+        <Redirect to="/" />
+      </Route>
+      <Route path="/category/:categoryName">
+        <Redirect to="/" />
+      </Route>
+      
       <Route component={NotFound} />
     </Switch>
   );

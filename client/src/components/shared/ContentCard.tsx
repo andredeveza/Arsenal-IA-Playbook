@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/store/userStore";
+import { Button } from "@/components/ui/button";
 
 interface ContentCardProps {
   item: ContentItem;
@@ -47,7 +48,7 @@ export default function ContentCard({ item }: ContentCardProps) {
 
   return (
     <div 
-      className="relative group h-[180px] md:h-[220px] min-w-[300px] md:min-w-[400px] rounded-lg transition-all duration-300 ease-in-out cursor-pointer z-10 bg-[#0a0a0a] border border-white/5 shadow-xl"
+      className="relative group h-[180px] md:h-[220px] min-w-[280px] sm:min-w-[300px] md:min-w-[400px] rounded-lg transition-all duration-300 ease-in-out cursor-pointer z-10 bg-[#0a0a0a] border border-white/5 shadow-xl select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleInteract}
@@ -65,7 +66,7 @@ export default function ContentCard({ item }: ContentCardProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent rounded-lg group-hover:opacity-0 transition-opacity duration-300" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent rounded-lg group-hover:opacity-0 transition-opacity duration-300" />
       
-      <div className="absolute bottom-4 left-5 right-4 group-hover:opacity-0 transition-opacity duration-300">
+      <div className="absolute bottom-4 left-4 right-4 group-hover:opacity-0 transition-opacity duration-300">
         <div className="flex items-center gap-2 mb-2">
           <div className={cn("text-[10px] font-bold uppercase px-2 py-0.5 rounded-sm border", getLevelColor(item.level))}>
             {item.level}
@@ -74,7 +75,7 @@ export default function ContentCard({ item }: ContentCardProps) {
             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
           )}
         </div>
-        <h3 className="text-white font-black text-lg md:text-xl leading-[1.1] text-balance">{item.title}</h3>
+        <h3 className="text-white font-black text-lg md:text-xl leading-[1.1] text-balance line-clamp-2">{item.title}</h3>
       </div>
       
       {item.isPremium && (
@@ -83,9 +84,19 @@ export default function ContentCard({ item }: ContentCardProps) {
         </div>
       )}
 
-      {/* Expanded Hover State (Cinematic Netflix style) */}
+      {/* Mobile visible action button (always visible on touch screens to fix interaction issue) */}
+      <div className="absolute top-3 left-3 md:hidden">
+         <button 
+            className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all shadow-lg active:scale-95"
+            onClick={handleToggleFavorite}
+          >
+            {isAdded ? <Check className="w-4 h-4 text-green-500" /> : <Plus className="w-4 h-4" />}
+          </button>
+      </div>
+
+      {/* Expanded Hover State (Cinematic Netflix style - Hidden on mobile, uses base click instead) */}
       <div className={cn(
-        "absolute -left-8 -right-8 -top-16 -bottom-16 bg-[#0a0a0a] rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-50 transition-all duration-300 ease-out flex flex-col overflow-hidden border border-white/10 ring-1 ring-white/5",
+        "hidden md:flex absolute -left-8 -right-8 -top-16 -bottom-16 bg-[#0a0a0a] rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-50 transition-all duration-300 ease-out flex-col overflow-hidden border border-white/10 ring-1 ring-white/5",
         isHovered ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
       )}>
         {/* Hover Image */}
