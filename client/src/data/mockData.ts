@@ -3,6 +3,7 @@ import { z } from "zod";
 export type ContentType = "master_prompt" | "architecture" | "conversion_system" | "narrative_engine";
 export type ContentLevel = "Fundacional" | "Avançado" | "Especialista";
 export type ContentTool = "ChatGPT Plus" | "Claude 3.5 Sonnet" | "Midjourney v6" | "Gemini Advanced" | "Agnóstico";
+export type VisualType = "prompt_anatomy" | "framework_map" | "funnel_illustration" | "script_storyboard";
 
 export interface ContentItem {
   id: string;
@@ -17,6 +18,8 @@ export interface ContentItem {
   isPremium?: boolean;
   isNew?: boolean;
   relatedIds?: string[];
+  visualType: VisualType;
+  visualData: any;
 }
 
 export interface Category {
@@ -25,7 +28,6 @@ export interface Category {
   items: ContentItem[];
 }
 
-// Generate mock data for the arsenal
 import thumbPrompts from "../assets/images/thumb-prompts.png";
 import thumbFrameworks from "../assets/images/thumb-frameworks.png";
 import thumbCopys from "../assets/images/thumb-copys.png";
@@ -38,6 +40,63 @@ export const assets = {
   thumbFrameworks,
   thumbCopys,
   thumbScripts
+};
+
+const getVisualData = (type: ContentType) => {
+  if (type === 'master_prompt') {
+    return {
+      type: "prompt_anatomy" as VisualType,
+      data: {
+        blocks: [
+          { name: "SYSTEM INSTRUCTION", role: "Define a base cognitiva e regras absolutas.", color: "border-purple-500", text: "text-purple-400" },
+          { name: "CONTEXTO", role: "Alinha a IA com o cenário atual do mercado.", color: "border-blue-500", text: "text-blue-400" },
+          { name: "PARÂMETROS DE EXECUÇÃO", role: "Limita o formato e tom de voz da saída.", color: "border-emerald-500", text: "text-emerald-400" },
+          { name: "CHAIN-OF-THOUGHT", role: "Força o raciocínio em etapas antes da resposta.", color: "border-orange-500", text: "text-orange-400" }
+        ],
+        outputPreview: "Análise estratégica de 4 quadrantes com alta precisão."
+      }
+    };
+  }
+  
+  if (type === 'architecture') {
+    return {
+      type: "framework_map" as VisualType,
+      data: {
+        nodes: [
+          { id: 1, title: "Input Cru", desc: "Transcrição ou Dados Desestruturados" },
+          { id: 2, title: "Fase 1: Extração", desc: "Mapeamento de Padrões e Sinais" },
+          { id: 3, title: "Fase 2: Síntese", desc: "Construção do Core Message" },
+          { id: 4, title: "Output Final", desc: "Estratégia Pronta para Escala" }
+        ]
+      }
+    };
+  }
+
+  if (type === 'conversion_system') {
+    return {
+      type: "funnel_illustration" as VisualType,
+      data: {
+        stages: [
+          { name: "Problema (Atenção)", metric: "100% Retenção Inicial" },
+          { name: "Agitação (Interesse)", metric: "60% Chegam Aqui" },
+          { name: "Causa (Desejo)", metric: "Construção de Lógica" },
+          { name: "Transformação (Ação)", metric: "Alta Taxa de Conversão" }
+        ]
+      }
+    };
+  }
+
+  return {
+    type: "script_storyboard" as VisualType,
+    data: {
+      scenes: [
+        { time: "0-3s", name: "O Gancho Visual", desc: "Quebra de padrão, movimento brusco, promessa forte.", img: thumbScripts },
+        { time: "3-15s", name: "A Ponte", desc: "Conecta a promessa inicial com a dor real do usuário.", img: thumbScripts },
+        { time: "15-45s", name: "O Mecanismo", desc: "Explica COMO funciona, gerando 'Aha Moment'.", img: thumbScripts },
+        { time: "45-60s", name: "CTA Indireto", desc: "Chamada para ação focada em curiosidade (Ex: 'Olha o link na bio').", img: thumbScripts }
+      ]
+    }
+  };
 };
 
 const createMockContent = (type: ContentType, title: string) => {
@@ -156,7 +215,7 @@ const createMockItems = (
 ): ContentItem[] => {
   const premiumTitles = [
     'O Sistema de Persuasão Omnicanal',
-    'Matriz de Criação de Autoriade',
+    'Matriz de Criação de Autoridade',
     'Prompt Zero: Inicialização de Contexto Profundo',
     'Engenharia de Prompt para High-Ticket',
     'Arquitetura de Funil Autônomo',
@@ -166,6 +225,8 @@ const createMockItems = (
 
   return Array.from({ length: count }).map((_, i) => {
     const title = `${premiumTitles[i % premiumTitles.length]} - V.${Math.floor(Math.random() * 5) + 1}.0`;
+    const visual = getVisualData(type);
+    
     return {
       id: `${type}-${i + 1}`,
       type,
@@ -182,6 +243,8 @@ const createMockItems = (
       tools: [tools[i % tools.length]],
       isPremium: i % 4 === 0,
       isNew: i < 3,
+      visualType: visual.type,
+      visualData: visual.data,
     };
   });
 };
@@ -221,6 +284,7 @@ export const homeCategories: Category[] = [
   },
 ];
 
+const heroVisual = getVisualData('architecture');
 export const heroContent: ContentItem = {
   id: "hero-featured",
   type: "architecture",
@@ -233,4 +297,6 @@ export const heroContent: ContentItem = {
   tools: ["Claude 3.5 Sonnet", "ChatGPT Plus"],
   isPremium: true,
   isNew: true,
+  visualType: heroVisual.type,
+  visualData: heroVisual.data,
 };
