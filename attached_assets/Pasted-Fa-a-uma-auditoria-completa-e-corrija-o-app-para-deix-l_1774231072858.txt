@@ -1,0 +1,74 @@
+Faça uma auditoria completa e corrija o app para deixá-lo realmente utilizável, estável e premium, com foco total em mobile.
+
+Prioridade 1: estabilidade e abertura
+
+Corrija qualquer problema que impeça o app de abrir corretamente na prévia estável.
+Elimine erros de carregamento, páginas em branco, erro 502 por configuração incorreta, rotas quebradas e qualquer falha que impeça navegação normal.
+Garanta que a home carregue rápido e de forma consistente.
+Prioridade 2: funcionamento real dos botões e fluxos
+
+Revise todos os botões e controles visíveis do app e garanta que todos funcionem de verdade.
+Isso inclui: login/acesso, entrar na biblioteca, abrir detalhes, voltar, pesquisar, filtrar, favoritar, copiar, compartilhar, navegar entre categorias, trocar nível, onboarding, CTAs, carrosséis, modais e qualquer botão de ação.
+Todo botão deve ter retorno visual claro: hover, active, loading, sucesso, erro e confirmação quando necessário.
+Se algum recurso ainda não estiver implementado, não deixe botão falso: ou implemente de verdade ou remova/substitua por estado “em breve” visualmente claro.
+Prioridade 3: experiência mobile first
+
+Otimize todo o app para celular e tablet.
+Corrija áreas clicáveis pequenas, sobreposição de elementos, menus ruins, textos espremidos, carrosséis difíceis de usar, modais quebrados, scroll ruim e qualquer problema de responsividade.
+Garanta ótima experiência em telas pequenas, especialmente Android.
+A navegação deve ser simples, fluida e clara em mobile.
+Prioridade 4: arquitetura de conteúdo mais madura
+
+Reduza a sensação de protótipo e mock.
+Organize prompts, frameworks, copys e scripts por níveis: Iniciante, Intermediário, Avançado e Mestre.
+Cada item deve parecer real, útil e premium.
+Diminua subdivisões excessivas e torne a curadoria mais inteligente.
+A biblioteca deve parecer um catálogo premium bem editado, não uma lista genérica.
+Prioridade 5: profundidade real no conteúdo
+
+Reescreva os prompts para parecerem criados por um especialista em engenharia de prompt.
+Cada prompt deve ter, sempre que possível:
+objetivo
+contexto
+papel da IA
+entradas esperadas
+estrutura de saída
+exemplo de uso
+quando usar
+quando não usar
+variações
+observações práticas
+Faça o mesmo padrão de profundidade, quando fizer sentido, para frameworks, copys e scripts.
+Prioridade 6: visual premium de verdade
+
+Mantenha a linguagem estilo Netflix/SaaS premium, mas com mais clareza e sofisticação.
+Melhore hierarquia visual, espaçamento, contraste, tipografia, ritmo de leitura, thumbnails/capas, cards e destaques.
+O app deve parecer um produto premium real, não só bonito em screenshot.
+Prioridade 7: visualizações representativas
+
+Em cada prompt, framework, copy e script, inclua elementos visuais que representem o resultado ou a lógica do item.
+Exemplos: anatomia do prompt, preview de saída, mapa visual do framework, funil simplificado, breakdown da copy, storyboard do script, fluxo visual ou mock de resultado.
+Esses visuais devem ajudar o usuário a entender rapidamente o item.
+Prioridade 8: prompts de imagem com preview coerente
+
+Para prompts de imagem, mostre uma prévia coerente do estilo/resultado esperado.
+Se não houver geração real por API implementada, use preview mock explícito e elegante, sem parecer quebrado.
+Não deixe promessa ambígua: se gera imagem real, funcione de verdade; se não gera, deixe claro que é visual demonstrativo.
+Prioridade 9: consistência e confiança
+
+Revise estados vazios, mensagens de erro, feedbacks e transições.
+Remova qualquer sensação de recurso incompleto ou falso.
+Garanta consistência entre home, biblioteca, páginas internas, favoritos e detalhes.
+Entregue o app funcional, consistente e polido. Antes de encerrar, valide manualmente os fluxos principais no próprio ambiente:
+
+abrir home
+entrar em uma coleção
+abrir item
+copiar
+favoritar
+pesquisar
+filtrar por nível
+voltar
+navegar no mobile
+abrir previews sem erro
+Quero uma versão realmente pronta para uso, não apenas uma demo visual.

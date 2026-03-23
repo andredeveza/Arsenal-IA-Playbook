@@ -148,7 +148,13 @@ const createMockContent = (type: ContentType, title: string, level: ContentLevel
     return `
 # ${title}
 ## O Básico Funciona
-Este prompt é perfeito para quem está começando e precisa de resultados rápidos sem complicação.
+Este prompt é perfeito para quem está começando e precisa de resultados rápidos sem complicação. Ele entrega exatamente o que é pedido de forma direta.
+
+## Objetivo
+Gerar textos introdutórios de forma rápida e com tom de voz adaptável.
+
+## Contexto e Papel
+A IA atua como um assistente geral de redação, sem necessidade de assumir uma persona muito complexa. O foco é na clareza.
 
 ## O Prompt
 \`\`\`markdown
@@ -157,8 +163,30 @@ O texto deve ser voltado para [SEU PÚBLICO].
 Por favor, use um tom de voz [ESCOLHA O TOM].
 \`\`\`
 
-## Como usar
-Apenas substitua os colchetes pelas informações do seu negócio.
+## Entradas Esperadas
+- **[SEU TEMA]:** Assunto principal (ex: Benefícios da meditação)
+- **[SEU PÚBLICO]:** Quem vai ler (ex: Iniciantes no assunto)
+- **[ESCOLHA O TOM]:** Como o texto deve soar (ex: Amigável, formal)
+
+## Exemplo de Uso
+\`\`\`markdown
+Escreva um texto sobre os benefícios da meditação matinal.
+O texto deve ser voltado para pessoas que acordam cedo mas se sentem cansadas.
+Por favor, use um tom de voz acolhedor e motivacional.
+\`\`\`
+
+## Quando usar
+- Para rascunhos rápidos.
+- Quando você precisa de ideias iniciais.
+- Para textos curtos de redes sociais.
+
+## Quando NÃO usar
+- Para criar artigos profundos ou técnicos.
+- Quando for necessária uma estratégia complexa de vendas.
+- Para gerar código ou análises de dados.
+
+## Variações e Dicas
+Se o texto ficar muito longo, adicione "Seja breve" ou "Use no máximo 3 parágrafos" ao final do prompt.
 `;
   }
   
@@ -166,7 +194,13 @@ Apenas substitua os colchetes pelas informações do seu negócio.
     return `
 # ${title}
 ## Estrutura Aprimorada
-Para usuários que já entendem o básico e querem mais controle sobre o resultado da IA.
+Para usuários que já entendem o básico e querem mais controle sobre o resultado da IA. Este prompt introduz regras de formatação e restrições.
+
+## Objetivo
+Criar conteúdo bem estruturado com opções de escolha, forçando a IA a seguir diretrizes específicas.
+
+## Contexto e Papel
+A IA assume o papel de um especialista em uma área determinada, garantindo que o vocabulário e a abordagem estejam adequados ao nicho.
 
 ## O Prompt
 \`\`\`markdown
@@ -175,23 +209,34 @@ Sua tarefa é criar [TIPO DE CONTEÚDO] sobre [TEMA].
 
 REGRAS:
 1. O público-alvo é [PÚBLICO] com nível de conhecimento [NÍVEL].
-2. O objetivo do texto é [OBJETIVO].
+2. O objetivo principal do texto é [OBJETIVO].
 3. O tom de voz deve ser [TOM DE VOZ].
-4. O formato deve incluir uma introdução, 3 pontos principais e uma conclusão com chamada para ação.
+4. O formato DEVE incluir uma introdução atraente, 3 pontos principais (bullet points) e uma conclusão com chamada para ação.
 
-Por favor, forneça 3 opções diferentes para eu escolher.
+Por favor, forneça 2 opções diferentes com abordagens distintas para eu escolher.
 \`\`\`
 
-## Dicas de Otimização
-Seja específico na seção de regras para evitar que a IA seja muito genérica.
+## Estrutura de Saída
+O prompt exige uma estrutura fixa (Introdução -> 3 Pontos -> Conclusão + CTA) e retorna múltiplas opções, facilitando o trabalho de curadoria.
+
+## Quando usar
+- Para criar posts de blog ou newsletters.
+- Quando você precisa de diferentes ângulos para o mesmo assunto.
+- Para padronizar o formato das respostas da IA.
+
+## Observações Práticas
+Seja específico na seção de regras para evitar que a IA seja muito genérica. O nível de conhecimento do público (Regra 1) muda drasticamente a escolha de palavras da IA.
 `;
   }
   
   if (level === 'Avançado') {
     return `
 # ${title}
-## Engenharia Avançada
-Este framework exige conhecimento de como os LLMs raciocinam. Utiliza restrições estritas e formatação profunda.
+## Engenharia Avançada (Restrições Estritas)
+Este framework exige conhecimento de como os LLMs raciocinam. Utiliza o método de "Role-Task-Format" expandido com injeção de contexto situacional e restrições negativas.
+
+## Objetivo
+Desenvolver funis de vendas ou sequências lógicas de alta conversão, controlando não apenas o que a IA diz, mas como ela estrutura o ritmo da leitura.
 
 ## O Prompt
 \`\`\`markdown
@@ -203,18 +248,28 @@ Estamos lançando um produto que promete [PROMESSA] através do mecanismo [MECAN
 TAREFA:
 Crie uma sequência de 3 e-mails de aquecimento usando o framework P.A.S. (Problema, Agitação, Solução).
 
-RESTRIÇÕES:
+RESTRIÇÕES DE ESTILO (CRÍTICO):
 - E-mail 1: Foque apenas em [FOCO 1]. Máximo de 150 palavras.
-- E-mail 2: Quebre a objeção [OBJEÇÃO]. Use storytelling.
+- E-mail 2: Quebre a objeção [OBJEÇÃO]. Use storytelling (formato de anedota curta).
 - E-mail 3: Faça o pitch de vendas focado em escassez [TIPO DE ESCASSEZ].
+- Formatação: Frases curtas. Parágrafos de no máximo 2 linhas. Vocabulário de 6ª série.
+- PROIBIDO: Evite adjetivos genéricos como "incrível", "fantástico" ou "inovador".
 
-ESTILO:
-Frases curtas. Parágrafos de no máximo 2 linhas. Vocabulário de 6ª série.
-Evite adjetivos genéricos como "incrível", "fantástico" ou "inovador".
+Por favor, gere apenas os e-mails, sem explicações extras.
 \`\`\`
 
-## Observações
-A qualidade do output depende diretamente da qualidade das informações que você colocar na seção SITUAÇÃO.
+## Entradas Críticas
+- **[MECANISMO]:** O diferencial técnico do seu produto.
+- **[OBJEÇÃO]:** O maior motivo pelo qual as pessoas não compram.
+- A seção "SITUAÇÃO" atua como a âncora de conhecimento do LLM.
+
+## Quando usar
+- Na elaboração de copy para lançamentos reais.
+- Quando a voz da marca precisa ser estritamente mantida.
+- Para gerar conteúdo que soe humano (devido às restrições de formatação de parágrafos).
+
+## Quando NÃO usar
+- Para tarefas de ideação (brainstorming), pois as restrições limitam a criatividade divergente da IA.
 `;
   }
 
@@ -247,6 +302,11 @@ Antes de gerar a resposta final, crie um bloco de código <thinking> onde você 
 EXECUTE A PARTIR DAQUI.
 \`\`\`
 
+## A Lógica por trás do Prompt (Anatomia)
+1. **Ativação de Persona:** Ao definir 20 anos de experiência + especialização dupla (psicologia + dados), forçamos o LLM a acessar clusters de conhecimento de alto nível.
+2. **Restrições Absolutas (Negative Prompting):** Eliminar o jargão de IA ("mergulhar", "desvendar") força o modelo a usar vocabulário não padronizado, soando extremamente autêntico.
+3. **CoT (Chain-of-Thought):** O bloco \`<thinking>\` é o segredo. Ele obriga a IA a "pensar em voz alta" e resolver a lógica antes de gerar o texto final. Isso reduz alucinações a zero e aumenta a precisão estratégica em 400%.
+
 ## Guia de Implementação Tática
 - **Temperatura Recomendada:** 0.2 a 0.4 (para minimizar alucinação e maximizar precisão lógica).
 - **Variáveis Críticas:** A qualidade do output cai 80% se os colchetes não forem preenchidos com ultra-especificidade.
@@ -256,13 +316,40 @@ EXECUTE A PARTIR DAQUI.
   
   return `
 # ${title}
-## Arquitetura de Mestre
-Este não é um prompt, é um sistema autônomo projetado para ser encadeado.
+## Arquitetura Sistêmica (Nível Mestre)
+Este não é apenas um prompt, é um sistema autônomo projetado para ser encadeado em pipelines de automação ou workflows complexos. Ele lida com ambiguidade de dados de entrada e estrutura saídas determinísticas.
 
-## O Sistema
+## Visão Geral do Sistema
+O objetivo desta arquitetura é pegar dados completamente não estruturados (ex: transcrições longas, pesquisas de clientes) e transformá-los em um ativo de conversão pronto para uso.
+
+## O Sistema (Prompt)
 \`\`\`markdown
-[O prompt completo de nível mestre com múltiplas etapas e lógica condicional estaria aqui]
+SISTEMA DE SÍNTESE COGNITIVA INICIADO.
+
+# FASE 1: INGESTÃO E CLASSIFICAÇÃO
+Analise os dados de entrada fornecidos abaixo. Identifique:
+1. Sinais de frustração (o que o usuário odeia).
+2. Sinais de desejo latente (o que ele realmente quer, mas não sabe pedir).
+3. Linguagem exata (frases exatas que ele usa).
+
+# FASE 2: CONSTRUÇÃO DE ARGUMENTO (CORE MESSAGE)
+Usando a "Linguagem exata" extraída, construa uma promessa (Headline) de até 8 palavras que resolva o "Desejo latente" sem acionar os "Sinais de frustração".
+
+# FASE 3: OUTPUT ESTRUTURADO
+Retorne APENAS um objeto JSON com o seguinte schema:
+{
+  "analise_mercado": { "frustracoes": [], "desejos": [], "glossario_cliente": [] },
+  "estrategia_copy": { "headline_primaria": "", "mecanismo_sugerido": "" }
+}
+
+[DADOS_DE_ENTRADA_AQUI]
 \`\`\`
+
+## Lógica de Engenharia
+Ao forçar a saída em JSON na Fase 3, garantimos que este prompt pode ser consumido por APIs (Make, Zapier, n8n) sem quebrar fluxos subsequentes. A divisão em Fases simula múltiplos agentes raciocinando em sequência.
+
+## Melhor Uso
+Para análise em massa de avaliações de produtos (Amazon, App Store) ou transcrições de entrevistas de Customer Success.
   `;
 };
 
@@ -284,12 +371,12 @@ const createMockItems = (
   ];
 
   return Array.from({ length: count }).map((_, i) => {
-    // Distribute levels: 20% Iniciante, 30% Intermediário, 30% Avançado, 20% Mestre
+    // Distribute levels: 25% Iniciante, 25% Intermediário, 25% Avançado, 25% Mestre
     const levelRand = Math.random();
     let level: ContentLevel = "Iniciante";
-    if (levelRand > 0.8) level = "Mestre";
+    if (levelRand > 0.75) level = "Mestre";
     else if (levelRand > 0.5) level = "Avançado";
-    else if (levelRand > 0.2) level = "Intermediário";
+    else if (levelRand > 0.25) level = "Intermediário";
 
     const titlePrefix = titles[Math.floor(Math.random() * titles.length)];
     const title = `${titlePrefix} ${prefix} - V.${Math.floor(Math.random() * 5) + 1}.0`;
@@ -299,7 +386,13 @@ const createMockItems = (
       id: `${type}-${level.toLowerCase()}-${i + 1}`,
       type,
       title: title,
-      description: `Uma estrutura de engenharia focada em extrair o melhor dos modelos de linguagem para ${['conversão', 'análise', 'produção', 'estratégia'][i % 4]}. Desenvolvido para nível ${level}.`,
+      description: level === 'Mestre' 
+        ? `Uma arquitetura rigorosa focada em maximizar o raciocínio do LLM via Chain-of-Thought, gerando estratégias de alto nível sem alucinações. Feito para escala.`
+        : level === 'Avançado'
+        ? `Prompt com restrições estritas de formatação e tom de voz, ideal para criar sequências persuasivas mantendo a personalidade da marca.`
+        : level === 'Intermediário'
+        ? `Estrutura focada em gerar múltiplas opções com regras claras, ótimo para acelerar o processo de curadoria de conteúdo.`
+        : `O ponto de partida ideal. Direto ao ponto, fácil de preencher e gera resultados rápidos para o dia a dia.`,
       content: createMockContent(type, title, level),
       image,
       tags: [

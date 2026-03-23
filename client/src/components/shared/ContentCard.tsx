@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/store/userStore";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface ContentCardProps {
   item: ContentItem;
@@ -14,16 +14,24 @@ export default function ContentCard({ item }: ContentCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [, setLocation] = useLocation();
   const { isFavorite, toggleFavorite } = useUserStore();
+  const { toast } = useToast();
   
   const isAdded = isFavorite(item.id);
 
-  const handleInteract = () => {
+  const handleInteract = (e: React.MouseEvent) => {
+    // Prevent interaction if clicking on mobile quick actions
+    if ((e.target as Element).closest('button')) return;
     setLocation(`/content/${item.id}`);
   };
 
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
     toggleFavorite(item.id);
+    toast({
+      title: isAdded ? "Removido do Arsenal" : "Adicionado ao Arsenal",
+      description: isAdded ? "Item removido da sua lista." : "Item salvo na sua lista para acesso rápido.",
+      duration: 2000,
+    });
   };
 
   const getTypeColor = (type: string) => {
@@ -48,7 +56,7 @@ export default function ContentCard({ item }: ContentCardProps) {
 
   return (
     <div 
-      className="relative group h-[180px] md:h-[220px] min-w-[280px] sm:min-w-[300px] md:min-w-[400px] rounded-lg transition-all duration-300 ease-in-out cursor-pointer z-10 bg-[#0a0a0a] border border-white/5 shadow-xl select-none"
+      className="relative group h-[180px] md:h-[220px] w-[280px] sm:w-[320px] md:w-[400px] rounded-lg transition-all duration-300 ease-in-out cursor-pointer z-10 bg-[#0a0a0a] border border-white/5 shadow-xl select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleInteract}
@@ -67,27 +75,28 @@ export default function ContentCard({ item }: ContentCardProps) {
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent rounded-lg group-hover:opacity-0 transition-opacity duration-300" />
       
       <div className="absolute bottom-4 left-4 right-4 group-hover:opacity-0 transition-opacity duration-300">
-        <div className="flex items-center gap-2 mb-2">
-          <div className={cn("text-[10px] font-bold uppercase px-2 py-0.5 rounded-sm border", getLevelColor(item.level))}>
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <div className={cn("text-[10px] font-bold uppercase px-2 py-0.5 rounded-sm border shrink-0", getLevelColor(item.level))}>
             {item.level}
           </div>
           {item.isNew && (
-            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shrink-0" />
           )}
         </div>
         <h3 className="text-white font-black text-lg md:text-xl leading-[1.1] text-balance line-clamp-2">{item.title}</h3>
       </div>
       
       {item.isPremium && (
-        <div className="absolute top-3 right-3 px-2 py-1 bg-gradient-to-br from-amber-500 to-amber-700 rounded-sm text-[10px] font-black tracking-widest text-white shadow-lg flex items-center gap-1">
+        <div className="absolute top-3 right-3 px-2 py-1 bg-gradient-to-br from-amber-500 to-amber-700 rounded-sm text-[10px] font-black tracking-widest text-white shadow-lg flex items-center gap-1 z-20">
           <Sparkles className="w-3 h-3" /> PRO
         </div>
       )}
 
       {/* Mobile visible action button (always visible on touch screens to fix interaction issue) */}
-      <div className="absolute top-3 left-3 md:hidden">
+      <div className="absolute top-3 left-3 md:hidden z-20">
          <button 
-            className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all shadow-lg active:scale-95"
+            className={cn("w-8 h-8 rounded-full backdrop-blur-md border text-white flex items-center justify-center transition-all shadow-lg active:scale-95", 
+              isAdded ? "bg-white/10 border-green-500/50" : "bg-black/60 border-white/20")}
             onClick={handleToggleFavorite}
           >
             {isAdded ? <Check className="w-4 h-4 text-green-500" /> : <Plus className="w-4 h-4" />}
@@ -126,7 +135,8 @@ export default function ContentCard({ item }: ContentCardProps) {
               </button>
               
               <button 
-                className="w-12 h-12 rounded-full bg-white/5 border border-white/20 text-white flex items-center justify-center hover:border-white hover:bg-white/10 transition-all shadow-lg hover:scale-105 active:scale-95 backdrop-blur-md"
+                className={cn("w-12 h-12 rounded-full border text-white flex items-center justify-center transition-all shadow-lg hover:scale-105 active:scale-95 backdrop-blur-md",
+                  isAdded ? "bg-white/10 border-green-500/50 hover:bg-white/20" : "bg-white/5 border-white/20 hover:border-white hover:bg-white/10")}
                 onClick={handleToggleFavorite}
               >
                 {isAdded ? <Check className="w-6 h-6 text-green-500" /> : <Plus className="w-6 h-6" />}
